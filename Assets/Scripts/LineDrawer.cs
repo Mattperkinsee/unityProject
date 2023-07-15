@@ -114,7 +114,6 @@ public class LineDrawer : MonoBehaviour
 
 
 
-    // Displays damage at the specified position
     private void DisplayDamage(Vector3 position)
     {
         if (damageTextPrefab == null)
@@ -142,6 +141,18 @@ public class LineDrawer : MonoBehaviour
         {
             Debug.LogError("Failed to get TextMeshProUGUI component from damageText");
         }
+
+        // Add a delay or timer before destroying the damage text object
+        StartCoroutine(DestroyDamageText(damageText));
+    }
+
+    private IEnumerator DestroyDamageText(GameObject damageTextObject)
+    {
+        // Wait for a certain duration before destroying the damage text object
+        yield return new WaitForSeconds(2f); // Change the duration as needed
+
+        // Destroy the damage text object
+        Destroy(damageTextObject);
     }
 
 

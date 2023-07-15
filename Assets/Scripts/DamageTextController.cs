@@ -1,26 +1,29 @@
-using System.Collections;
 using UnityEngine;
-using TMPro;
 
 public class DamageTextController : MonoBehaviour
 {
     public float speed = 1.0f;  // The speed at which the text should move upwards
-    public float lifetime = 1.0f;  // How long the text should exist before disappearing
+    public float distanceThreshold = 10.0f;  // The distance the text needs to travel before being destroyed
 
-    void Start()
+    private Vector3 initialPosition;  // The initial position of the text
+
+    private void Start()
     {
-        StartCoroutine(DestroyAfterTime(lifetime));
+        initialPosition = transform.position;
     }
 
-    void Update()
+    private void Update()
     {
         // Move upwards
         transform.position += Vector3.up * speed * Time.deltaTime;
-    }
 
-    IEnumerator DestroyAfterTime(float time)
-    {
-        yield return new WaitForSeconds(time);
-        Destroy(gameObject);
+        // Calculate the distance traveled from the initial position
+        float distance = Vector3.Distance(transform.position, initialPosition);
+
+        // Check if the distance threshold has been reached
+        if (distance >= distanceThreshold)
+        {
+            Destroy(gameObject);
+        }
     }
 }

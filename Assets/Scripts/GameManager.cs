@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public GameObject pauseCanvas;
     public GameObject optionsCanvas;
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,7 +38,6 @@ public class GameManager : MonoBehaviour
     {
         // Set the game canvas to inactive
         gameCanvas.SetActive(false);
-
         // Set the pause canvas to active
         pauseCanvas.SetActive(true);
 
@@ -51,7 +51,6 @@ public class GameManager : MonoBehaviour
     {
         // Set the game canvas to active
         gameCanvas.SetActive(true);
-
         // Set the pause canvas to inactive
         pauseCanvas.SetActive(false);
 
