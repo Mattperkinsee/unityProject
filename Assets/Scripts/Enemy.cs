@@ -67,6 +67,7 @@ public class Enemy : MonoBehaviour
         if (spawner != null)
         {
             spawner.RespawnEnemy();
+            spawner.RespawnEnemy();
         }
         else
         {
@@ -80,12 +81,14 @@ public class Enemy : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(attackInterval);
+            // Generate a random attack interval between 2 and 5 seconds
+            float randomInterval = Random.Range(2f, 5f);
+            yield return new WaitForSeconds(randomInterval);
 
             // Call the TakeDamage method in the HealthManager
             healthManager.TakeDamage(attackDamage);
 
-            Debug.Log("Enemy attacked player!"); // Add this debug log
+            Debug.Log("Enemy attacked player!");
         }
     }
 
