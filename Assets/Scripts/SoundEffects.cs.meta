@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 1d1f4ead0aa2a1e4bbe271bd2fd0634c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - levelUpSound: {fileID: 8300000, guid: 65c5355f3d69074448c702e445a4d20a, type: 3}
+  - healSound: {fileID: 8300000, guid: 727f24dd61d44da4b9c2c548fbafb185, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

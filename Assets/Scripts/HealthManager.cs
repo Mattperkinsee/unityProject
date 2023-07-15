@@ -16,7 +16,7 @@ public class HealthManager : MonoBehaviour
 
     void Start()
     {
-
+        playerStats = PlayerStats.GetInstance();
         healthAmount = playerStats.GetPlayerCurrentHP();
         // You can initialize the AudioSource here if it's not assigned in the inspector
         if (audioSource == null)
@@ -48,12 +48,12 @@ public class HealthManager : MonoBehaviour
         Debug.Log("Player takes:" + damage);
         healthAmount = playerStats.GetPlayerCurrentHP() - damage;
         healthBar.fillAmount = healthAmount / playerStats.GetPlayerMaxHP();
-        playerStats.playerCurrentHP = healthAmount;
+        playerStats.SetPlayerCurrentHP(healthAmount);
         playerStats.UpdateHPText();
 
-        
-            playerStats.UpdateDaysSurvived();
-            playerStats.UpdateEnemiesKilled();
+        Debug.Log("Update player stats with: ");
+        playerStats.UpdateDaysSurvived();
+        playerStats.UpdateEnemiesKilled();
         //Player died!
         if (healthAmount <= 0)
         {

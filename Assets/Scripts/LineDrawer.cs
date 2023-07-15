@@ -84,30 +84,33 @@ public class LineDrawer : MonoBehaviour
 
     // Collision detection
     void OnTriggerEnter2D(Collider2D other)
-{
-    if (other.gameObject.CompareTag("Enemy"))
     {
-        Debug.Log("Collision detected with: " + other.gameObject.name);
-
-        // Play the collision sound
-        if (collisionSound != null && audioSource != null)
+        if (other.gameObject.CompareTag("Enemy"))
         {
-            audioSource.PlayOneShot(collisionSound);
-        }
+            Debug.Log("Collision detected with: " + other.gameObject.name);
 
-        // Cause damage to the enemy
-        Enemy enemy = other.gameObject.GetComponentInParent<Enemy>();
+            // Play the collision sound
+            if (collisionSound != null && audioSource != null)
+            {
+                audioSource.PlayOneShot(collisionSound);
+            }
 
-        if (enemy != null)
-        {
-            // Get the collision point from the collision event data
-            Vector3 collisionPoint = other.transform.position;
+            // Cause damage to the enemy
+            Enemy enemy = other.gameObject.GetComponentInParent<Enemy>();
 
-            // Cause damage to the enemy at the collision point
-            enemy.TakeDamage(damageAmount);
+            if (enemy != null)
+            {
+                // Get the collision point from the collision event data
+                Vector3 collisionPoint = other.transform.position;
+
+                // Cause damage to the enemy at the collision point
+                enemy.TakeDamage(damageAmount);
+
+                // Display the damage at the collision point
+                DisplayDamage(collisionPoint);
+            }
         }
     }
-}
 
 
 

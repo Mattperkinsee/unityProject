@@ -27,7 +27,7 @@ public class Tome : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        playerStats = PlayerStats.GetInstance();
         // You can initialize the AudioSource here if it's not assigned in the inspector
         if (audioSource == null)
         {

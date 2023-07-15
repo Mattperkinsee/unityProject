@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -12,15 +13,15 @@ public class PlayerStats : MonoBehaviour
     private const string PlayerPrefsKey = "PlayerStatsData";
 
     //initialize values
-    public int xp = 0; // Player's XP
-    public int level = 1; // Player's Level
-    public int xpToNextLevel = 10; // XP required to reach the next level
-    public float playerCurrentHP = 10f; //Starting Player's HP
-    public float playerMaxHP = 10f; //Starting Player's Max HP
-    public int playerCurrentXP = 0; //Starting Player's XP
-    public int playerPrevXP = 0;
-    public int daysSurvived = 0;
-    public int enemiesKilled = 0;
+    public int xp; // Player's XP
+    public int level; // Player's Level
+    public int xpToNextLevel; // XP required to reach the next level
+    public float playerCurrentHP; //Starting Player's HP
+    public float playerMaxHP; //Starting Player's Max HP
+    public int playerCurrentXP; //Starting Player's XP
+    public int playerPrevXP;
+    public int daysSurvived;
+    public int enemiesKilled;
 
     // Data class to store the player stats
     [System.Serializable]
@@ -37,13 +38,11 @@ public class PlayerStats : MonoBehaviour
         public int enemiesKilled;
     }
 
-
     //external components
-    public HealthManager healthManager; // Assign the HealthManager in the inspector
-    public GameClock gameClock; // Assign the HealthManager in the inspector
-    public EnemyCounter enemyCounter; // Assign the HealthManager in the inspector
+    public HealthManager healthManager;
+    public GameClock gameClock;
+    public EnemyCounter enemyCounter;
     public Image XPBar;
-
 
     //text components
     public TextMeshProUGUI playerLevelText;
@@ -51,14 +50,66 @@ public class PlayerStats : MonoBehaviour
     public TextMeshProUGUI hpText;
 
     //audio components
-    public AudioSource audioSource;  // The audio source component that will play the sound
-    public AudioClip levelUpSound;  // The audio clip that contains the sound
-    public AudioClip healSound;  // The audio clip that contains the sound
+    private AudioSource audioSource;
+    public AudioClip levelUpSound;
+    public AudioClip healSound;
+
+
+    public void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SavePlayerStats();
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
+    {
+        if (scene.name == "Game")
+        {
+            InitializeGameScene();
+        }
+        else if (scene.name == "Main")
+        {
+            InitializeMainMenu();
+        }
+    }
+
+    private void InitializeGameScene()
+    {
+        gameClock = FindObjectOfType<GameClock>();
+        enemyCounter = FindObjectOfType<EnemyCounter>();
+        healthManager = FindObjectOfType<HealthManager>();
+
+        playerLevelText = GameObject.Find("LevelText").GetComponent<TextMeshProUGUI>();
+        xpText = GameObject.Find("XPText").GetComponent<TextMeshProUGUI>();
+        hpText = GameObject.Find("HPText").GetComponent<TextMeshProUGUI>();
+
+        XPBar = GameObject.Find("XPBarFill").GetComponent<Image>();
+        if (XPBar == null)
+        {
+            Debug.LogError("XPBarFill not found in the scene!");
+        }
+
+
+
+        LoadPlayerStats();
+    }
+
+    private void InitializeMainMenu()
+    {
+        // Perform initialization specific to the Main scene
+        // ...
+    }
+
     public void IncrementXP()
     {
-        xp++; // Increment the XP by 1
-        // Update the TextMeshPro component with the new XP value
+        xp++;
         xpText.text = "XP: " + GetXP().ToString();
+
         if (xp >= xpToNextLevel)
         {
             LevelUp();
@@ -66,7 +117,6 @@ public class PlayerStats : MonoBehaviour
 
         UpdateXPBar();
 
-        // You can perform additional actions or logic here based on the XP increase
         Debug.Log("Player XP increased! Current XP: " + xp);
     }
 
@@ -75,13 +125,6 @@ public class PlayerStats : MonoBehaviour
         int currentXP = GetXP();
         int nextLevelXP = GetXPToNextLevel();
         int prevXP = GetPrevXP();
-        int xpDiff = GetXPDiff();
-
-        // if (currentXP >= nextLevelXP)
-        // {
-        //     currentXP -= nextLevelXP;
-        //     nextLevelXP = GetXPToNextLevel();
-        // }
 
         float fillAmount = ((float)currentXP - (float)prevXP) / ((float)nextLevelXP - (float)prevXP);
         XPBar.fillAmount = fillAmount;
@@ -89,35 +132,29 @@ public class PlayerStats : MonoBehaviour
 
     public void UpdateHPText()
     {
-        // Update the TextMeshPro component with the new HP values
         hpText.text = "HP: " + GetPlayerCurrentHP().ToString() + "/" + GetPlayerMaxHP().ToString();
     }
 
     private void LevelUp()
     {
-        level++; // Increment the level
+        level++;
         playerPrevXP = GetXP();
-        xpToNextLevel += 10; // Increase the XP required for the next level
+        xpToNextLevel += 10;
 
         playerMaxHP += 10;
         UpdateHPText();
         healthManager.UpdateHPBar();
-
-
-        // Play the level up sound
-        if (levelUpSound != null && audioSource != null)
+        if (levelUpSound)
         {
             audioSource.PlayOneShot(levelUpSound);
         }
-        // Update the playerLevelText to display the updated level
+
         if (playerLevelText != null)
         {
             playerLevelText.text = "Level: " + level;
         }
 
-        // You can perform additional actions or logic here when the player levels up
         Debug.Log("Player leveled up! Current Level: " + level);
-
     }
 
     public void Heal(float healingAmount)
@@ -128,17 +165,15 @@ public class PlayerStats : MonoBehaviour
         }
         else if (playerCurrentHP + healingAmount < playerMaxHP)
         {
-
-            // Play the level up sound
-            if (healSound != null && audioSource != null)
+            
+            playerCurrentHP += healingAmount;
+            if (healSound)
             {
                 audioSource.PlayOneShot(healSound);
             }
-            playerCurrentHP += healingAmount;
         }
 
         UpdateHPText();
-
     }
 
     public int GetXP()
@@ -171,6 +206,10 @@ public class PlayerStats : MonoBehaviour
         return playerCurrentHP;
     }
 
+    public void SetPlayerCurrentHP(float newHP)
+    {
+        playerCurrentHP = newHP;
+    }
     public int GetXPToNextLevel()
     {
         return xpToNextLevel;
@@ -189,58 +228,27 @@ public class PlayerStats : MonoBehaviour
     public void UpdateDaysSurvived()
     {
         daysSurvived = gameClock.GetDaysSurvived();
+        Debug.Log("Days survived: " + daysSurvived);
     }
 
     public void UpdateEnemiesKilled()
     {
         enemiesKilled = enemyCounter.GetEnemiesKilled();
-    }
-
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-        // You can initialize the AudioSource here if it's not assigned in the inspector
-        if (audioSource == null)
-        {
-            audioSource = GetComponent<AudioSource>();
-        }
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        Debug.Log("Enemies killed: " + enemiesKilled);
     }
 
     private void Awake()
     {
-        // Check if an instance already exists
         if (instance == null)
         {
-            // If not, set this instance as the singleton instance
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else
         {
-            // If an instance already exists and it's not this one, destroy this duplicate
-            if (instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
+            Destroy(gameObject);
+            return;
         }
-
-        LoadPlayerStats();
-    }
-
-    private void OnDisable()
-    {
-        SavePlayerStats();
     }
 
     private void LoadPlayerStats()
@@ -250,7 +258,6 @@ public class PlayerStats : MonoBehaviour
             string jsonData = PlayerPrefs.GetString(PlayerPrefsKey);
             PlayerStatsData statsData = JsonUtility.FromJson<PlayerStatsData>(jsonData);
 
-            // Load the saved player stats
             xp = statsData.xp;
             level = statsData.level;
             xpToNextLevel = statsData.xpToNextLevel;
@@ -267,7 +274,6 @@ public class PlayerStats : MonoBehaviour
 
     private void SavePlayerStats()
     {
-        // Create a data object to store the player stats
         PlayerStatsData statsData = new PlayerStatsData
         {
             xp = xp,
@@ -281,20 +287,31 @@ public class PlayerStats : MonoBehaviour
             enemiesKilled = enemiesKilled
         };
 
-        // Convert the data object to JSON
         string jsonData = JsonUtility.ToJson(statsData);
-
-        // Save the JSON string to PlayerPrefs
         PlayerPrefs.SetString(PlayerPrefsKey, jsonData);
 
         Debug.Log("Player stats saved.");
     }
 
-    // Create a public static method to access the singleton instance
     public static PlayerStats GetInstance()
     {
         return instance;
     }
+
+    public void ResetPlayerStats()
+    {
+        xp = 0;
+        level = 1;
+        xpToNextLevel = 10;
+        playerCurrentHP = 10f;
+        playerMaxHP = 10f;
+        playerCurrentXP = 0;
+        playerPrevXP = 0;
+        daysSurvived = 0;
+        enemiesKilled = 0;
+
+        SavePlayerStats();
+
+        Debug.Log("Player stats reset to initial values.");
+    }
 }
-
-

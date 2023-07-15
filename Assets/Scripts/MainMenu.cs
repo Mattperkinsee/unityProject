@@ -5,14 +5,21 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-   public void PlayGame()
+
+    public PlayerStats playerStats; // Assign the PlayerStats in the inspector
+    
+    public void PlayGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        // Reset the player stats
+        playerStats.ResetPlayerStats();
+
+        // Load the Game scene
+        SceneManager.LoadScene("Game");
     }
 
     public void ReturnToMainMenu()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+        SceneManager.LoadScene("Main");
     }
 
     public void QuitGame()
