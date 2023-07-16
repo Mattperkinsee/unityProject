@@ -27,7 +27,19 @@ public class Enemy : MonoBehaviour
 
     private Rigidbody2D rb;
 
-    public PlayerStats playerStats;
+    public PlayerStats playerStats; // Import player stats
+
+    private bool isDamaged = false;
+
+    public bool IsDamaged()
+    {
+        return isDamaged;
+    }
+
+    public void SetDamaged(bool damaged)
+    {
+        isDamaged = damaged;
+    }
 
     private void Awake()
     {

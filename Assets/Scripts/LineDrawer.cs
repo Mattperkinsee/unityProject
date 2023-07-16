@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+using UnityEngine.Audio;
 public class LineDrawer : MonoBehaviour
 {
     public LineRenderer lineRenderer;
@@ -16,6 +16,10 @@ public class LineDrawer : MonoBehaviour
 
     public string sortingLayerName = "Line";  // Sorting layer name for the line
     public int sortingOrder = 1;  // Sorting order for the line
+
+    public int maxPlayingCollisionSounds = 3; // Maximum number of simultaneous audio clips allowed
+    private int currentPlayingCollisionSounds = 0; // Counter variable to track the number of playing sounds
+
 
     private void Update()
     {
@@ -58,8 +62,6 @@ public class LineDrawer : MonoBehaviour
         collidedEnemies.Clear();
     }
 
-
-
     private void StopDrawing()
     {
         isDrawing = false;
@@ -85,10 +87,13 @@ public class LineDrawer : MonoBehaviour
         lineRenderer.enabled = false;
     }
 
-
-
     private void UpdateLinePositions()
     {
+        if (!isDrawing)
+        {
+            return;
+        }
+
         Vector3 mousePos = GetMouseWorldPosition();
         Vector3 startPos = lineRenderer.GetPosition(0);
         float distance = Vector3.Distance(startPos, mousePos);
@@ -114,43 +119,57 @@ public class LineDrawer : MonoBehaviour
             }
 
             // Add raycasting here
-            RaycastHit2D hit = Physics2D.Linecast(startPos, mousePos);
-            if (hit.collider != null)
+            RaycastHit2D[] hits = Physics2D.LinecastAll(startPos, mousePos);
+            foreach (RaycastHit2D hit in hits)
             {
-                if (hit.collider.gameObject.CompareTag("Enemy"))
+                if (hit.collider != null && hit.collider.gameObject.CompareTag("Enemy"))
                 {
                     // Collided with enemy!
-                    // Debug.Log("Collision detected with: " + hit.collider.gameObject.name);
-                    // Cause damage to the enemy
                     Enemy enemy = hit.collider.gameObject.GetComponentInParent<Enemy>();
 
-                    if (enemy != null && !collidedEnemies.Contains(enemy))
+                    if (enemy != null && !collidedEnemies.Contains(enemy) && !enemy.IsDamaged())
                     {
-                        // Start the coroutine to clear the collided enemies list after 0.5 seconds
-                        StartCoroutine(ClearCollidedEnemiesAfterDelay(0.3f));
-
-                        // Play the collision sound
-                        if (collisionSound != null && audioSource != null)
+                        if (collisionSound != null && audioSource != null && currentPlayingCollisionSounds < maxPlayingCollisionSounds)
                         {
                             audioSource.PlayOneShot(collisionSound);
+                            currentPlayingCollisionSounds++;
+                            StartCoroutine(CollisionSoundFinished(collisionSound.length));
                         }
 
+
                         collidedEnemies.Add(enemy);
+                        enemy.SetDamaged(true);
+
                         // Get the collision point from the collision event data
                         Vector3 collisionPoint = hit.transform.position;
 
-                        // Cause damage to the enemy at the collision point
-                        enemy.TakeDamage(damageAmount);
-
-                        // Display the damage at the collision point
-                        DisplayDamage(collisionPoint);
+                        // Cause damage to the enemy at the collision point after a slight delay
+                        StartCoroutine(DamageEnemyWithDelay(enemy, collisionPoint, 0.2f));
                     }
                 }
             }
         }
     }
 
+    private IEnumerator CollisionSoundFinished(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        // Sound has finished playing, do something
+        currentPlayingCollisionSounds--;
+    }
 
+    private IEnumerator DamageEnemyWithDelay(Enemy enemy, Vector3 collisionPoint, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        // Cause damage to the enemy at the collision point
+        enemy.TakeDamage(damageAmount);
+        enemy.SetDamaged(false);
+        // Display the damage at the collision point
+        DisplayDamage(collisionPoint);
+
+        // Clear the collided enemies list after a short delay to prevent immediate collisions
+        StartCoroutine(ClearCollidedEnemiesAfterDelay(0.3f));
+    }
 
     private Vector3 GetMouseWorldPosition()
     {
@@ -159,10 +178,6 @@ public class LineDrawer : MonoBehaviour
         Camera mainCamera = Camera.main;
         return mainCamera.ScreenToWorldPoint(mousePos);
     }
-
-
-
-
 
     private void DisplayDamage(Vector3 position)
     {
@@ -192,11 +207,5 @@ public class LineDrawer : MonoBehaviour
         {
             Debug.LogError("Failed to get TextMeshProUGUI component from damageText");
         }
-
-
     }
-
-
-
-
 }
