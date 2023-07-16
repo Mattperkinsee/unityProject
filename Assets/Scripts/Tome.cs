@@ -14,7 +14,7 @@ public class Tome : MonoBehaviour
     public void OnClickIncrementXP()
     {
         // Call a method or increment a variable in the PlayerXP script to increase the XP
-        playerStats.IncrementXP();
+        playerStats.IncrementXP(1);
 
 
 

@@ -21,11 +21,13 @@ ScriptedImporter:
     convertToNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
+    swizzle: 50462976
     isReadable: 0
     streamingMipmaps: 1
     streamingMipmapsPriority: 0
     vTOnly: 0
-    ignoreMasterTextureLimit: 0
+    ignoreMipmapLimit: 0
     nPOTScale: 1
     sRGBTexture: 1
     spriteMode: 2
@@ -88,7 +90,6 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 0, y: 0}
     spritePosition: {x: 0, y: 0}
   mosaicSpriteImportData: []
@@ -855,7 +856,6 @@ ScriptedImporter:
     - {x: 62, y: 63}
     - {x: 0, y: 63}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 312, y: -1101}
     spritePosition: {x: 871, y: 1105}
   - name: Arm-f-down
@@ -1564,7 +1564,6 @@ ScriptedImporter:
     - {x: 37, y: 36}
     - {x: 0, y: 37}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -338, y: 1471}
     spritePosition: {x: 935, y: 659}
   - name: Arm-f-down_1
@@ -2222,7 +2221,6 @@ ScriptedImporter:
     - {x: 46, y: 47}
     - {x: 0, y: 47}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -552, y: 2864}
     spritePosition: {x: 893, y: 518}
   - name: Arm-f-up_1
@@ -2960,7 +2958,6 @@ ScriptedImporter:
     - {x: 47, y: 46}
     - {x: 0, y: 47}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -893, y: 2579}
     spritePosition: {x: 897, y: 803}
   - name: Hat
@@ -3568,7 +3565,6 @@ ScriptedImporter:
     - {x: 46, y: 45}
     - {x: 0, y: 46}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -657, y: 332}
     spritePosition: {x: 1212, y: 1608}
   - name: Head
@@ -4389,7 +4385,6 @@ ScriptedImporter:
     - {x: 69, y: 68}
     - {x: 69, y: 0}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -1044, y: 1151}
     spritePosition: {x: 1048, y: 1262}
   - name: Dress
@@ -5166,7 +5161,6 @@ ScriptedImporter:
     - {x: 65, y: 64}
     - {x: 65, y: 58}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -1053, y: 1039}
     spritePosition: {x: 1057, y: 628}
   - name: Neck
@@ -5711,7 +5705,6 @@ ScriptedImporter:
     - {x: 43, y: 42}
     - {x: 0, y: 43}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -299, y: 74}
     spritePosition: {x: 1143, y: 1265}
   - name: Row Body
@@ -6213,7 +6206,6 @@ ScriptedImporter:
     - {x: 40, y: 39}
     - {x: 36, y: 40}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -981, y: -339}
     spritePosition: {x: 985, y: 343}
   - name: Leg-f-band
@@ -6903,7 +6895,6 @@ ScriptedImporter:
     - {x: 48, y: 47}
     - {x: 48, y: 0}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -674, y: 3649}
     spritePosition: {x: 1054, y: 238}
   - name: Leg-f-down
@@ -7585,7 +7576,6 @@ ScriptedImporter:
     - {x: 51, y: 50}
     - {x: 0, y: 51}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 844, y: 4}
     spritePosition: {x: 1074, y: 127}
   - name: Leg-f-up
@@ -8170,7 +8160,6 @@ ScriptedImporter:
     - {x: 44, y: 43}
     - {x: 0, y: 44}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 558, y: 2943}
     spritePosition: {x: 1118, y: 401}
   - name: Leg-b-band
@@ -8850,7 +8839,6 @@ ScriptedImporter:
     - {x: 48, y: 47}
     - {x: 0, y: 48}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -472, y: 1342}
     spritePosition: {x: 1334, y: 273}
   - name: Leg-b-down
@@ -9501,7 +9489,6 @@ ScriptedImporter:
     - {x: 50, y: 49}
     - {x: 0, y: 50}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -510, y: 784}
     spritePosition: {x: 1354, y: 159}
   - name: Leg-b-up
@@ -10084,7 +10071,6 @@ ScriptedImporter:
     - {x: 42, y: 41}
     - {x: 42, y: 36}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -1048, y: 2579}
     spritePosition: {x: 1052, y: 364}
   - name: Weapon
@@ -10922,7 +10908,6 @@ ScriptedImporter:
     - {x: 66, y: 65}
     - {x: 66, y: 0}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -1543, y: 570}
     spritePosition: {x: 1574, y: 563}
   - name: Arm-b-down
@@ -11419,7 +11404,6 @@ ScriptedImporter:
     - {x: 35, y: 34}
     - {x: 0, y: 35}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -1014, y: 1595}
     spritePosition: {x: 1590, y: 692}
   - name: Arm-b-up
@@ -12042,7 +12026,6 @@ ScriptedImporter:
     - {x: 51, y: 50}
     - {x: 51, y: 0}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -931, y: 551}
     spritePosition: {x: 1486, y: 1116}
   - name: Arm-b-down_1
@@ -12648,7 +12631,6 @@ ScriptedImporter:
     - {x: 45, y: 44}
     - {x: 0, y: 45}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -962, y: 1858}
     spritePosition: {x: 1536, y: 555}
   - name: Arm-b-up_1
@@ -13295,7 +13277,6 @@ ScriptedImporter:
     - {x: 46, y: 45}
     - {x: 46, y: 0}
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: -618, y: -371}
     spritePosition: {x: 1462, y: 820}
   characterData:
@@ -13627,6 +13608,7 @@ ScriptedImporter:
       order: 0
     dimension: {x: 0, y: 0}
     characterGroups: []
+    pivot: {x: 0, y: 0}
     boneReadOnly: 0
   sharedRigSpriteImportData: []
   sharedRigCharacterData:
@@ -13634,10 +13616,12 @@ ScriptedImporter:
     parts: []
     dimension: {x: 0, y: 0}
     characterGroups: []
+    pivot: {x: 0, y: 0}
     boneReadOnly: 0
   platformSettings:
   - name: DefaultTexturePlatform
     overridden: 0
+    ignorePlatformSupport: 0
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -13649,6 +13633,7 @@ ScriptedImporter:
     androidETC2FallbackOverride: 0
   - name: Standalone
     overridden: 0
+    ignorePlatformSupport: 0
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -13660,6 +13645,7 @@ ScriptedImporter:
     androidETC2FallbackOverride: 0
   - name: Android
     overridden: 0
+    ignorePlatformSupport: 0
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -13671,6 +13657,7 @@ ScriptedImporter:
     androidETC2FallbackOverride: 0
   - name: WebGL
     overridden: 0
+    ignorePlatformSupport: 0
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -13690,6 +13677,8 @@ ScriptedImporter:
   paperDollMode: 0
   keepDupilcateSpriteName: 0
   skeletonAssetReferenceID: 
+  padding: 4
+  spriteSizeExpand: 0
   spriteCategoryList:
     categories: []
   spritePackingTag: 
@@ -14008,6 +13997,9 @@ ScriptedImporter:
     isVisible: 0
   sharedRigPSDLayers: []
   pSDLayerImportSetting: []
+  importFileNodeState: 1
+  platformSettingsDirtyTick: 0
+  spriteSizeExpandChanged: 0
   generateGOHierarchy: 0
   textureAssetName: Avalieh-Cow 1 Texture
   prefabAssetName: Avalieh-Cow 1 Prefab

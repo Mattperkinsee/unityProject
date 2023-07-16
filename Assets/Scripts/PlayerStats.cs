@@ -105,9 +105,9 @@ public class PlayerStats : MonoBehaviour
         // ...
     }
 
-    public void IncrementXP()
+    public void IncrementXP(int xpAmt)
     {
-        xp++;
+        xp += xpAmt;
         xpText.text = "XP: " + GetXP().ToString();
 
         if (xp >= xpToNextLevel)
