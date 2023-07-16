@@ -64,6 +64,17 @@ public class LineDrawer : MonoBehaviour
     private void UpdateLinePositions()
     {
         Vector3 mousePos = GetMouseWorldPosition();
+        Vector3 startPos = lineRenderer.GetPosition(0);
+        float distance = Vector3.Distance(startPos, mousePos);
+        float thresholdDistance = 20f; // Set the length you want to be the maximum for your line
+
+        if (distance > thresholdDistance)
+        {
+            // If the length of the line exceeds the threshold, set the start position to the old end position
+            startPos = lineRenderer.GetPosition(1);
+            lineRenderer.SetPosition(0, startPos);
+        }
+
         lineRenderer.SetPosition(1, mousePos);
 
         // Update collider position to match line end point
@@ -72,7 +83,18 @@ public class LineDrawer : MonoBehaviour
         {
             boxCollider.transform.position = mousePos;
         }
+
+        // Update edge collider
+        EdgeCollider2D edgeCollider = GetComponent<EdgeCollider2D>();
+        if (edgeCollider)
+        {
+            Vector2[] points = new Vector2[2];
+            points[0] = startPos;
+            points[1] = mousePos;
+            edgeCollider.points = points;
+        }
     }
+
 
     private Vector3 GetMouseWorldPosition()
     {
@@ -85,7 +107,8 @@ public class LineDrawer : MonoBehaviour
     // Collision detection
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Enemy"))
+        Debug.Log("collision! with something." + other.gameObject);
+        if (other.gameObject.CompareTag("Enemy") || other.gameObject.CompareTag("Cow2"))
         {
             Debug.Log("Collision detected with: " + other.gameObject.name);
 
@@ -116,6 +139,7 @@ public class LineDrawer : MonoBehaviour
 
     private void DisplayDamage(Vector3 position)
     {
+        Debug.Log("Show damage!");
         if (damageTextPrefab == null)
         {
             Debug.LogError("DamageTextPrefab is not assigned. Please assign it in the inspector.");

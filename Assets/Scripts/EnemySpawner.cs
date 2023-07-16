@@ -15,34 +15,38 @@ public class EnemySpawner : MonoBehaviour
     }
 
 
-    public void SpawnEnemy()
-    {
-        // Calculate the random position within the canvas bounds
-        float canvasWidth = gameCanvas.GetComponent<RectTransform>().rect.width;
-        float canvasHeight = gameCanvas.GetComponent<RectTransform>().rect.height;
-        float minX = -canvasWidth / 3.5f;
-        float maxX = canvasWidth / 3.5f;
-        float minY = -canvasHeight / 3.5f;
-        float maxY = canvasHeight / 3.5f;
+   public void SpawnEnemy()
+{
+    // Calculate the random position within the canvas bounds
+    float canvasWidth = gameCanvas.GetComponent<RectTransform>().rect.width;
+    float canvasHeight = gameCanvas.GetComponent<RectTransform>().rect.height;
+    float minX = -canvasWidth / 3.5f;
+    float maxX = canvasWidth / 3.5f;
+    float minY = -canvasHeight / 3.5f;
+    float maxY = canvasHeight / 3.5f;
 
-        // Calculate the random position within the specified ranges
-        Vector3 randomPosition = new Vector3(
-            Random.Range(minX, maxX),
-            Random.Range(minY, maxY),
-            0f);
+    // Calculate the random position within the specified ranges
+    Vector3 randomPosition = new Vector3(
+        Random.Range(minX, maxX),
+        Random.Range(minY, maxY),
+        0f);
 
-        // Convert the local position to a world position
-        Vector3 worldPosition = gameCanvas.TransformPoint(randomPosition);
+    // Convert the local position to a world position
+    Vector3 worldPosition = gameCanvas.TransformPoint(randomPosition);
 
-        // Instantiate the enemy prefab as a child of the GameCanvas
-        GameObject enemyInstance = Instantiate(enemyPrefab, gameCanvas);
-        // Set the position to the world position
-        enemyInstance.transform.position = worldPosition;
-        // Reset the local rotation
-        enemyInstance.transform.localRotation = Quaternion.identity;
-        // Give the new enemy a reference to the spawner so it can trigger a respawn
-        enemyInstance.GetComponent<Enemy>().spawner = this;
-    }
+    // Instantiate the enemy prefab as a child of the GameCanvas
+    GameObject enemyInstance = Instantiate(enemyPrefab, gameCanvas);
+
+    // Set the position to the world position
+    enemyInstance.transform.position = worldPosition;
+
+    // Set the local rotation to 180 degrees around the Y-axis
+    enemyInstance.transform.localRotation = Quaternion.Euler(0, 180, 0);
+
+    // Give the new enemy a reference to the spawner so it can trigger a respawn
+    enemyInstance.GetComponent<Enemy>().spawner = this;
+}
+
 
 
 

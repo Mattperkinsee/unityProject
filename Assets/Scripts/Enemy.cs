@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
-    public HealthManager healthManager; // Assign the HealthManager in the inspector
+
     Coroutine attackLoop;
     public float attackInterval = 2f; // Time in seconds between each attack
     public float attackDamage = 2f; // Amount of health to subtract on each attack
@@ -14,6 +14,8 @@ public class Enemy : MonoBehaviour
     public GameObject enemyHealthBarObject;
     public GameObject enemyPrefab; // Reference to the enemy prefab
     public GameObject enemySprite; // Child object of EnemyObject that contains the visual representation of the enemy
+
+    public HealthManager healthManager; // Assign the HealthManager in the inspector
     public EnemySpawner spawner;
     public EnemyCounter enemyCounter;
 
@@ -23,12 +25,13 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         enemyCounter = FindObjectOfType<EnemyCounter>();
+        spawner = FindObjectOfType<EnemySpawner>();
         healthManager = FindObjectOfType<HealthManager>();
         // Start the attack loop
         attackLoop = StartCoroutine(AttackLoop());
 
         // Disable collision detection initially
-        SetCollisionDetection(false);
+        SetCollisionDetection(true);
 
         Debug.Log("Enemy Start called."); // Debug log to check if Start method is executed
     }
@@ -67,7 +70,7 @@ public class Enemy : MonoBehaviour
         if (spawner != null)
         {
             spawner.RespawnEnemy();
-            spawner.RespawnEnemy();
+            // spawner.RespawnEnemy();
         }
         else
         {
