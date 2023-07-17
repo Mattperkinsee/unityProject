@@ -7,6 +7,8 @@ public class EnemySpawner : MonoBehaviour
     private Vector3 initialPosition; // Store the initial position of the spawner
     private Transform gameCanvas; // Reference to the GameCanvas transform
 
+    public int maxEnemies = 10; // This can be any number you want.
+    private int currentEnemyCount = 0;
     void Start()
     {
         gameCanvas = GameObject.Find("GameCanvas").transform; // Assign the GameCanvas reference
@@ -17,6 +19,9 @@ public class EnemySpawner : MonoBehaviour
 
     public void SpawnEnemy()
     {
+
+        if (currentEnemyCount >= maxEnemies) return; // Don't spawn if there are already maxEnemies in the scene
+
         // Calculate the random position within the canvas bounds
         float canvasWidth = gameCanvas.GetComponent<RectTransform>().rect.width;
         float canvasHeight = gameCanvas.GetComponent<RectTransform>().rect.height;
@@ -39,7 +44,7 @@ public class EnemySpawner : MonoBehaviour
 
         // Instantiate the enemy prefab as a child of the GameCanvas
         GameObject enemyInstance = Instantiate(enemyPrefab, gameCanvas);
-
+        currentEnemyCount++; // Increment the enemy count
         // Set the position to the world position
         enemyInstance.transform.position = worldPosition;
 
@@ -49,6 +54,12 @@ public class EnemySpawner : MonoBehaviour
         // Give the new enemy a reference to the spawner so it can trigger a respawn
         enemyInstance.GetComponent<Enemy>().spawner = this;
     }
+
+    public void OnEnemyDestroyed()
+    {
+        currentEnemyCount--;  // Decrement the enemy count when an enemy is destroyed.
+    }
+
 
 
 

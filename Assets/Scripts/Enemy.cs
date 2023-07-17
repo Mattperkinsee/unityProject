@@ -110,12 +110,14 @@ public class Enemy : MonoBehaviour
 
         // Destroy the enemy object
         Destroy(gameObject);
+        spawner.OnEnemyDestroyed(); //decrement enemy count
+
 
         // If the spawner is not null, call RespawnEnemy
         if (spawner != null)
         {
             spawner.RespawnEnemy();
-            spawner.RespawnEnemy(); //exponential enemies!
+            // spawner.RespawnEnemy(); //exponential enemies!
         }
         else
         {

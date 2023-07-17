@@ -14,8 +14,10 @@ public class HealthManager : MonoBehaviour
     public AudioSource audioSource;  // The audio source component that will play the sound
     public AudioClip damageSound;  // The audio clip that contains the sound
 
+    private Shake shake;
     void Start()
     {
+        shake = GameObject.FindGameObjectWithTag("ScreenShake").GetComponent<Shake>();
         playerStats = PlayerStats.GetInstance();
         healthAmount = playerStats.GetPlayerCurrentHP();
         // You can initialize the AudioSource here if it's not assigned in the inspector
@@ -50,7 +52,7 @@ public class HealthManager : MonoBehaviour
         healthBar.fillAmount = healthAmount / playerStats.GetPlayerMaxHP();
         playerStats.SetPlayerCurrentHP(healthAmount);
         playerStats.UpdateHPText();
-
+        shake.CamShake();
         Debug.Log("Update player stats with: ");
         playerStats.UpdateDaysSurvived();
         playerStats.UpdateEnemiesKilled();

@@ -19,8 +19,9 @@ public class LineDrawer : MonoBehaviour
 
     public int maxPlayingCollisionSounds = 3; // Maximum number of simultaneous audio clips allowed
     private int currentPlayingCollisionSounds = 0; // Counter variable to track the number of playing sounds
+    public GameObject bloodParticlePrefab;
 
-
+    private Shake shake;
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -45,7 +46,7 @@ public class LineDrawer : MonoBehaviour
         lineRenderer.sortingLayerName = sortingLayerName;
         lineRenderer.sortingOrder = sortingOrder;
 
-        // Rest of your Start method...
+        shake = GameObject.FindGameObjectWithTag("ScreenShake").GetComponent<Shake>();
     }
 
     private void StartDrawing()
@@ -141,10 +142,10 @@ public class LineDrawer : MonoBehaviour
                         enemy.SetDamaged(true);
 
                         // Get the collision point from the collision event data
-                        Vector3 collisionPoint = hit.transform.position;
+                        Vector3 collisionPoint = hit.point;
 
                         // Cause damage to the enemy at the collision point after a slight delay
-                        StartCoroutine(DamageEnemyWithDelay(enemy, collisionPoint, 0.2f));
+                        StartCoroutine(DamageEnemyWithDelay(enemy, collisionPoint, 0.1f));
                     }
                 }
             }
@@ -162,6 +163,23 @@ public class LineDrawer : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         // Cause damage to the enemy at the collision point
+        shake.CamShake();
+        // Instantiate the blood particle system at the collision point and parent it to the enemy
+        GameObject bloodPS = Instantiate(bloodParticlePrefab, collisionPoint, Quaternion.identity, enemy.transform);
+
+        // Get the particle system renderer
+        ParticleSystemRenderer psr = bloodPS.GetComponent<ParticleSystemRenderer>();
+
+        // Set the sorting layer to be the topmost
+        psr.sortingLayerName = "Topmost";
+
+        // Set the order in layer to be higher than the other sprites
+        psr.sortingOrder = 10;
+
+        // Set the parent to the enemy transform
+        bloodPS.transform.SetParent(enemy.transform);
+        // Destroy the blood particle system after 0.3 seconds
+        // Destroy(bloodPS, .4f);
         enemy.TakeDamage(damageAmount);
         enemy.SetDamaged(false);
         // Display the damage at the collision point
