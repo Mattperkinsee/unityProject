@@ -104,6 +104,21 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    // Apply a small velocity to the enemy in the direction of the attack
+    public void ApplyAttackVelocity(Vector3 attackDirection, float velocityMagnitude)
+    {
+
+        Debug.Log("Apply attack velocity?");
+        Rigidbody2D enemyRigidbody = GetComponent<Rigidbody2D>();
+        Debug.Log("Rigidbody?" + enemyRigidbody);
+        if (enemyRigidbody != null)
+        {
+            Debug.Log("Apply attack velocity");
+            enemyRigidbody.isKinematic = false; // Make the Rigidbody non-kinematic
+            enemyRigidbody.velocity = -attackDirection.normalized * velocityMagnitude;
+        }
+    }
+
     void Die()
     {
         // Call the IncrementEnemyCount() method on the enemyCounter script

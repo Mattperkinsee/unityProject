@@ -5,6 +5,7 @@ using UnityEngine.Audio;
 public class LineDrawer : MonoBehaviour
 {
     public LineRenderer lineRenderer;
+    public GameManager gameManager;
     public GameObject damageTextPrefab;  // Prefab for displaying damage text
     public float damageAmount = 10f;  // The amount of damage to display
     public RectTransform canvasRectTransform;  // RectTransform of your canvas
@@ -23,13 +24,20 @@ public class LineDrawer : MonoBehaviour
     public GameObject bloodParticlePrefab;
 
     private Shake shake;
+
+    private float averageCursorSpeed; // Average speed of the cursor movement
+    private float cursorSpeedSum; // Sum of cursor speeds
+    private int cursorSpeedCount; // Number of cursor speeds recorded
+
+    private Vector3 mousePos = Vector3.zero;
+    private Vector3 prevMousePos = Vector3.zero;
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && Time.timeScale > 0)
         {
             StartDrawing();
         }
-        else if (Input.GetMouseButtonUp(0))
+        else if (Input.GetMouseButtonUp(0) || Time.timeScale <= 0)
         {
             StopDrawing();
         }
@@ -96,11 +104,18 @@ public class LineDrawer : MonoBehaviour
             return;
         }
 
-        Vector3 mousePos = GetMouseWorldPosition();
+        prevMousePos = mousePos;
+        mousePos = GetMouseWorldPosition();
+
+        // Calculate cursor speed during drawing phase
+        float cursorSpeed = (mousePos - prevMousePos).magnitude / Time.deltaTime;
+        cursorSpeedSum += cursorSpeed;
+        cursorSpeedCount++;
+
         Vector3 startPos = lineRenderer.GetPosition(0);
         float distance = Vector3.Distance(startPos, mousePos);
 
-        if (distance > .11f) // You can adjust this minimum distance as needed
+        if (distance > 0.1f) // You can adjust this minimum distance as needed
         {
             if (lineRenderer.positionCount >= maxLinePoints)
             {
@@ -147,11 +162,27 @@ public class LineDrawer : MonoBehaviour
                         // Get the collision point from the collision event data
                         Vector3 collisionPoint = hit.point;
 
+                        // Calculate the attack direction
+                        Vector3 attackDirection = collisionPoint - enemy.transform.position;
+
+                        // Calculate velocity magnitude based on average cursor speed
+                        float velocityMagnitude = 0f;
+                        float speedMultiplier = 50f;
+                        if (cursorSpeedCount > 0)
+                        {
+                            averageCursorSpeed = cursorSpeedSum / cursorSpeedCount;
+                            velocityMagnitude = averageCursorSpeed * speedMultiplier;
+                        }
+
+
                         // Cause damage to the enemy at the collision point after a slight delay
-                        StartCoroutine(DamageEnemyWithDelay(enemy, collisionPoint, 0.1f));
+                        StartCoroutine(DamageEnemyWithDelay(enemy, collisionPoint, attackDirection, velocityMagnitude, 0.1f));
                     }
                 }
             }
+            // Reset cursor speed counters after each frame
+            cursorSpeedSum = 0f;
+            cursorSpeedCount = 0;
         }
     }
 
@@ -162,7 +193,7 @@ public class LineDrawer : MonoBehaviour
         currentPlayingCollisionSounds--;
     }
 
-    private IEnumerator DamageEnemyWithDelay(Enemy enemy, Vector3 collisionPoint, float delay)
+    private IEnumerator DamageEnemyWithDelay(Enemy enemy, Vector3 collisionPoint, Vector3 attackDirection, float velocityMagnitude, float delay)
     {
         yield return new WaitForSeconds(delay);
         // Cause damage to the enemy at the collision point
@@ -185,6 +216,7 @@ public class LineDrawer : MonoBehaviour
         Destroy(bloodPS, .4f);
         enemy.TakeDamage(damageAmount);
         enemy.SetDamaged(false);
+        // enemy.ApplyAttackVelocity(attackDirection, velocityMagnitude);
         // Display the damage at the collision point
         DisplayDamage(collisionPoint);
 
