@@ -10,6 +10,7 @@ public class LineDrawer : MonoBehaviour
     public RectTransform canvasRectTransform;  // RectTransform of your canvas
     public AudioSource audioSource;  // The audio source component that will play the sound
     public AudioClip collisionSound;  // The audio clip that contains the sound
+    public AudioClip bloodSound;  // The audio clip that contains the sound
     public int maxLinePoints = 10;
     private List<Enemy> collidedEnemies = new List<Enemy>();
     private bool isDrawing;
@@ -132,10 +133,12 @@ public class LineDrawer : MonoBehaviour
                     {
                         if (collisionSound != null && audioSource != null && currentPlayingCollisionSounds < maxPlayingCollisionSounds)
                         {
-                            audioSource.PlayOneShot(collisionSound);
+                            // Debug.Log("AudioSource volume: " + audioSource.volume);
+                            // audioSource.PlayOneShot(collisionSound, 1f);
                             currentPlayingCollisionSounds++;
                             StartCoroutine(CollisionSoundFinished(collisionSound.length));
                         }
+                        audioSource.PlayOneShot(bloodSound, 0.1f);
 
 
                         collidedEnemies.Add(enemy);
@@ -179,7 +182,7 @@ public class LineDrawer : MonoBehaviour
         // Set the parent to the enemy transform
         bloodPS.transform.SetParent(enemy.transform);
         // Destroy the blood particle system after 0.3 seconds
-        // Destroy(bloodPS, .4f);
+        Destroy(bloodPS, .4f);
         enemy.TakeDamage(damageAmount);
         enemy.SetDamaged(false);
         // Display the damage at the collision point

@@ -67,7 +67,7 @@ public class HealthManager : MonoBehaviour
         // Play the damage sound
         if (damageSound != null && audioSource != null)
         {
-            audioSource.PlayOneShot(damageSound);
+            audioSource.PlayOneShot(damageSound, 0.5f);
         }
     }
 

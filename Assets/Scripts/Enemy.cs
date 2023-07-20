@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 public class Enemy : MonoBehaviour
 {
@@ -31,6 +32,9 @@ public class Enemy : MonoBehaviour
 
     private bool isDamaged = false;
 
+    // public AudioSource audioSource;  // The audio source component that will play the sound
+    // public AudioClip deathSound;  // The audio clip that contains the sound
+
     public bool IsDamaged()
     {
         return isDamaged;
@@ -49,6 +53,8 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
+        // GameObject audioSourceObject = GameObject.Find("SoundEffects");
+        // audioSource = audioSourceObject.GetComponent<AudioSource>();
         playerStats = PlayerStats.GetInstance();
         enemyCounter = FindObjectOfType<EnemyCounter>();
         spawner = FindObjectOfType<EnemySpawner>();
@@ -105,12 +111,14 @@ public class Enemy : MonoBehaviour
         // Stop the attack coroutine
         StopCoroutine(attackLoop);
 
+        // audioSource.PlayOneShot(deathSound);
+
         //Increment Player XP
         playerStats.IncrementXP(5);
 
         // Destroy the enemy object
         Destroy(gameObject);
-        spawner.OnEnemyDestroyed(); //decrement enemy count
+        spawner.OnEnemyDestroyed(); //decrement enemy count for max enemy limit
 
 
         // If the spawner is not null, call RespawnEnemy
